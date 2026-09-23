@@ -1,0 +1,107 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          timeout: 120s
+          command_timeout: 15m
+
+          script: |
+            set -e
+
+            echo "======================================"
+            echo "Starting deployment"
+            echo "======================================"
+
+            cd "${{ secrets.DEPLOY_PATH }}"
+
+            echo "Server: $(hostname)"
+            echo "Directory: $(pwd)"
+
+            echo "--------------------------------------"
+            echo "Updating source code"
+            echo "--------------------------------------"
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "--------------------------------------"
+            echo "Installing Composer dependencies"
+            echo "--------------------------------------"
+
+            composer install \
+              --no-dev \
+              --no-interaction \
+              --prefer-dist \
+              --optimize-autoloader
+
+            echo "--------------------------------------"
+            echo "Installing frontend dependencies"
+            echo "--------------------------------------"
+
+            npm ci
+
+            echo "--------------------------------------"
+            echo "Building frontend assets"
+            echo "--------------------------------------"
+
+            npm run build
+
+            echo "--------------------------------------"
+            echo "Running database migrations"
+            echo "--------------------------------------"
+
+            php artisan migrate --force
+
+            echo "--------------------------------------"
+            echo "Clearing Laravel caches"
+            echo "--------------------------------------"
+
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+            php artisan cache:clear
+
+            echo "--------------------------------------"
+            echo "Optimizing Laravel"
+            echo "--------------------------------------"
+
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            echo "--------------------------------------"
+            echo "Creating storage link"
+            echo "--------------------------------------"
+
+            php artisan storage:link || true
+
+            echo "--------------------------------------"
+            echo "Restarting queue workers"
+            echo "--------------------------------------"
+
+            php artisan queue:restart || true
+
+            echo "======================================"
+            echo "Deployment completed successfully!"
+            echo "======================================"
