@@ -6,8 +6,11 @@ use App\Actions\ChangeApplicationStatus;
 use App\Enums\ApplicationStatus;
 use App\Models\Application;
 use App\Models\Designation;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -100,7 +103,7 @@ class Index extends Component
 
     public function updateRole(int $applicationId, ?string $roleId): void
     {
-        if (in_array($roleId, [\App\Models\Role::ADMIN, \App\Models\Role::SUPER_ADMIN], true)) {
+        if (in_array($roleId, [Role::ADMIN, Role::SUPER_ADMIN], true)) {
             $this->dispatch('notify', type: 'error', message: 'Admin and Superadmin roles are not allowed here.');
 
             return;
@@ -119,6 +122,19 @@ class Index extends Component
             $user->roles()->sync([$roleId]);
         } else {
             $user->roles()->detach();
+        }
+
+        if ($roleId === Role::MARKETING_OFFICER && ! $user->referral_code) {
+            $baseReferralCode = Str::slug($user->username ?? $user->name) . '-referral';
+            $referralCode = $baseReferralCode;
+            $counter = 1;
+
+            while (User::where('referral_code', $referralCode)->exists()) {
+                $referralCode = $baseReferralCode . '-' . $counter;
+                $counter++;
+            }
+
+            $user->update(['referral_code' => $referralCode]);
         }
 
         $this->dispatch('notify', type: 'success', message: 'Role updated successfully.');
