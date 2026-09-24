@@ -46,5 +46,11 @@
                 <span class="spinner-border spinner-border-sm me-1"></span> Signing in...
             </span>
         </button>
+
+        <div class="text-center mt-3">
+            <p class="text-center small text-muted mt-3 mb-0">Not a member yet?
+            <a href="{{ route('register') }}" wire:navigate class="text-brand text-decoration-none">Create a New Account</a>
+            </p>
+        </div>
     </form>
 </div>
