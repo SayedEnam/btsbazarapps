@@ -5,6 +5,7 @@ namespace App\Livewire\Officer\Applications;
 use App\Actions\ChangeApplicationStatus;
 use App\Enums\ApplicationStatus;
 use App\Models\Application;
+use App\Models\Designation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
@@ -26,6 +27,8 @@ class Index extends Component
     public ?int $rejectingId = null;
 
     public string $rejectionReason = '';
+
+    public ?int $designationId = null;
 
     public function updatingSearch(): void
     {
@@ -86,6 +89,21 @@ class Index extends Component
         }
     }
 
+    public function updateDesignation(int $applicationId, ?int $designationId): void
+    {
+        $application = $this->ownApplicationOrFail($applicationId);
+        $officer = $application->officer->officer;
+
+        if (! $officer) {
+            $this->dispatch('notify', type: 'error', message: 'Officer profile not found for this application.');
+
+            return;
+        }
+
+        $officer->update(['designation_id' => $designationId]);
+        $this->dispatch('notify', type: 'success', message: 'Designation updated successfully.');
+    }
+
     protected function applyStatusChange(Application $application, ApplicationStatus $status, ?string $reason = null): bool
     {
         try {
@@ -103,7 +121,7 @@ class Index extends Component
     {
         $applications = Application::query()
             ->where('officer_id', Auth::id())
-            ->with(['customer.user', 'package'])
+            ->with(['customer.user', 'package', 'officer.officer.designation'])
             ->when($this->search, fn ($query) => $query->where(function ($q) {
                 $q->where('application_number', 'like', "%{$this->search}%")
                     ->orWhereHas('customer.user', function ($uq) {
@@ -117,6 +135,7 @@ class Index extends Component
 
         return view('livewire.officer.applications.index', [
             'applications' => $applications,
+            'designations' => Designation::orderBy('name')->get(),
         ]);
     }
 }

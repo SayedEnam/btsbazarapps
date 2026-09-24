@@ -24,11 +24,12 @@
                     <thead>
                         <tr>
                             <th>App #</th>
-                            <th>Customer</th>
+                            <th>Name</th>
                             <th>Package</th>
                             <th>Price</th>
                             <th>Applied</th>
                             <th>Status</th>
+                            <th>Designation</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -44,6 +45,16 @@
                                 <td>৳{{ number_format((float) $application->package_price, 2) }}</td>
                                 <td class="text-muted">{{ $application->application_date->format('d M Y') }}</td>
                                 <td><span class="badge {{ $application->status->badgeClass() }}">{{ $application->status->label() }}</span></td>
+                                <td>
+                                    <select class="form-select form-select-sm" wire:change="updateDesignation({{ $application->id }}, $event.target.value)">
+                                        <option value="">No Designation</option>
+                                        @foreach ($designations as $designation)
+                                            <option value="{{ $designation->id }}" {{ ($application->officer->officer->designation_id ?? null) == $designation->id ? 'selected' : '' }}>
+                                                {{ $designation->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
                                 <td class="text-end">
                                     @if (in_array($application->status, [\App\Enums\ApplicationStatus::Pending, \App\Enums\ApplicationStatus::UnderReview]))
                                         <div class="btn-group">
@@ -64,7 +75,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">No applications assigned to you.</td>
+                                <td colspan="8" class="text-center text-muted py-4">No applications assigned to you.</td>
                             </tr>
                         @endforelse
                     </tbody>
