@@ -4,7 +4,7 @@
             <h1 class="h4 mb-1">Welcome, {{ auth()->user()->name }}</h1>
             <p class="text-muted mb-0">Your referral code: <code>{{ auth()->user()->referral_code }}</code></p>
             @php $referralUrl = rtrim(config('app.url'), '/') . '/r/' . auth()->user()->referral_code; @endphp
-            <p class="text-muted mb-0 small">Your referral link: <a href="{{ $referralUrl }}" target="_blank" rel="noopener" class="text-decoration-none">{{ $referralUrl }}</a></p>
+            <p class="text-muted mb-0 small">Your referral link: <span id="referralUrlText">{{ $referralUrl }}</span> <button type="button" class="btn btn-sm btn-link p-0 ms-1" onclick="navigator.clipboard.writeText(document.getElementById('referralUrlText').innerText).then(() => alert('Referral link copied!'))" title="Copy referral link"><i class="bi bi-clipboard"></i></button></p>
             <p class="mb-0">
                 <a href="{{ route('officer.profile') }}" class="text-decoration-none small" wire:navigate>Get Referral Link</a>
             </p>
