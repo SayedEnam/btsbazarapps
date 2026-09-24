@@ -56,7 +56,16 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <td class="text-muted small">{{ $application->customer?->user?->roles->pluck('name')->join(', ') ?: '-' }}</td>
+                                <td class="text-muted small">
+                                    <select class="form-select form-select-sm" wire:change="updateRole({{ $application->id }}, $event.target.value)">
+                                        <option value="">No Role</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}" {{ $application->customer?->user?->roles->contains('id', $role->id) ? 'selected' : '' }}>
+                                                {{ $role->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
                                 <td class="text-end">
                                     @if (in_array($application->status, [\App\Enums\ApplicationStatus::Pending, \App\Enums\ApplicationStatus::UnderReview]))
                                         <div class="btn-group">

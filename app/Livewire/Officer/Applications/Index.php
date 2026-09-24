@@ -98,6 +98,26 @@ class Index extends Component
         $this->dispatch('notify', type: 'success', message: 'Designation updated successfully.');
     }
 
+    public function updateRole(int $applicationId, ?string $roleId): void
+    {
+        $application = $this->ownApplicationOrFail($applicationId);
+        $user = $application->customer?->user;
+
+        if (! $user) {
+            $this->dispatch('notify', type: 'error', message: 'User not found for this application.');
+
+            return;
+        }
+
+        if ($roleId) {
+            $user->roles()->sync([$roleId]);
+        } else {
+            $user->roles()->detach();
+        }
+
+        $this->dispatch('notify', type: 'success', message: 'Role updated successfully.');
+    }
+
     protected function applyStatusChange(Application $application, ApplicationStatus $status, ?string $reason = null): bool
     {
         try {
@@ -130,6 +150,7 @@ class Index extends Component
         return view('livewire.officer.applications.index', [
             'applications' => $applications,
             'designations' => Designation::orderBy('name')->get(),
+            'roles' => \App\Models\Role::orderBy('name')->get(),
         ]);
     }
 }
