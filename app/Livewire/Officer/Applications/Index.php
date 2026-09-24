@@ -89,8 +89,10 @@ class Index extends Component
         }
     }
 
-    public function updateDesignation(int $applicationId, ?int $designationId): void
+    public function updateDesignation(int $applicationId, ?string $designationId): void
     {
+        $designationId = $designationId === '' ? null : (int) $designationId;
+
         $application = $this->ownApplicationOrFail($applicationId);
         $application->update(['designation_id' => $designationId]);
         $this->dispatch('notify', type: 'success', message: 'Designation updated successfully.');
