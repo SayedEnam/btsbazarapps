@@ -30,6 +30,7 @@
                             <th>Applied</th>
                             <th>Status</th>
                             <th>Designation</th>
+                            <th>Role</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -55,6 +56,7 @@
                                         @endforeach
                                     </select>
                                 </td>
+                                <td class="text-muted small">{{ $application->customer?->user?->roles->pluck('name')->join(', ') ?: '-' }}</td>
                                 <td class="text-end">
                                     @if (in_array($application->status, [\App\Enums\ApplicationStatus::Pending, \App\Enums\ApplicationStatus::UnderReview]))
                                         <div class="btn-group">
@@ -75,7 +77,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-4">No applications assigned to you.</td>
+                                <td colspan="9" class="text-center text-muted py-4">No applications assigned to you.</td>
                             </tr>
                         @endforelse
                     </tbody>

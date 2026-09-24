@@ -115,7 +115,7 @@ class Index extends Component
     {
         $applications = Application::query()
             ->where('officer_id', Auth::id())
-            ->with(['customer.user', 'package', 'designation'])
+            ->with(['customer.user.roles', 'package', 'designation'])
             ->when($this->search, fn ($query) => $query->where(function ($q) {
                 $q->where('application_number', 'like', "%{$this->search}%")
                     ->orWhereHas('customer.user', function ($uq) {
