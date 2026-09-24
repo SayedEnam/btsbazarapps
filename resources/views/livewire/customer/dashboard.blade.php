@@ -3,7 +3,7 @@
         <div>
             <h1 class="h4 mb-1">Welcome, {{ auth()->user()->name }}</h1>
             @if ($customer?->referral?->officer)
-                <p class="text-muted mb-0">Your officer: {{ $customer->referral->officer->name }}@if ($customer->referral->officer->officer?->designation?->name) - {{ $customer->referral->officer->officer->designation->name }}@endif</p>
+                <p class="text-muted mb-0">{{ $customer->referral->officer->officer?->designation?->name ?? '' }} {{ $customer->referral->officer->name }}</p>
             @else
                 <p class="text-muted mb-0">Here's a snapshot of your Monthly Bazar membership.</p>
             @endif
