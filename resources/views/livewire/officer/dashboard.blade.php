@@ -2,9 +2,14 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h1 class="h4 mb-1">Welcome, {{ auth()->user()->name }}</h1>
-            <p class="text-muted mb-0">Your referral code: <code>{{ auth()->user()->referral_code }}</code></p>
-            @php $referralUrl = rtrim(config('app.url'), '/') . '/r/' . auth()->user()->referral_code; @endphp
-            <p class="text-muted mb-0 small">Your referral link: <span id="referralUrlText">{{ $referralUrl }}</span> <button type="button" class="btn btn-sm btn-link p-0 ms-1" onclick="navigator.clipboard.writeText(document.getElementById('referralUrlText').innerText).then(() => alert('Referral link copied!'))" title="Copy referral link"><i class="bi bi-clipboard"></i></button></p>
+            @php $referralCode = auth()->user()->referral_code; @endphp
+            @if ($referralCode)
+                <p class="text-muted mb-0">Your referral code: <code>{{ $referralCode }}</code></p>
+                @php $referralUrl = rtrim(config('app.url'), '/') . '/r/' . $referralCode; @endphp
+                <p class="text-muted mb-0 small">Your referral link: <span id="referralUrlText">{{ $referralUrl }}</span> <button type="button" class="btn btn-sm btn-link p-0 ms-1" onclick="navigator.clipboard.writeText(document.getElementById('referralUrlText').innerText).then(() => alert('Referral link copied!'))" title="Copy referral link"><i class="bi bi-clipboard"></i></button></p>
+            @else
+                <p class="text-muted mb-0">Your referral code will appear here after your profile is set up.</p>
+            @endif
         </div>
         <a href="{{ route('officer.profile') }}" class="btn btn-outline-brand" wire:navigate>
             <i class="bi bi-link-45deg me-1"></i> Get Referral Link

@@ -5,7 +5,10 @@ namespace App\Livewire\Officer;
 use App\Enums\ApplicationStatus;
 use App\Enums\CustomerStatus;
 use App\Models\Application;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -17,6 +20,24 @@ class Dashboard extends Component
     public function markNotificationRead(string $notificationId): void
     {
         Auth::user()->notifications()->where('id', $notificationId)->first()?->markAsRead();
+    }
+
+    public function mount(): void
+    {
+        $user = Auth::user();
+
+        if (! $user->referral_code && $user->hasRole(Role::MARKETING_OFFICER)) {
+            $baseReferralCode = Str::slug($user->username ?? $user->name) . '-referral';
+            $referralCode = $baseReferralCode;
+            $counter = 1;
+
+            while (User::where('referral_code', $referralCode)->exists()) {
+                $referralCode = $baseReferralCode . '-' . $counter;
+                $counter++;
+            }
+
+            $user->update(['referral_code' => $referralCode]);
+        }
     }
 
     public function render()
