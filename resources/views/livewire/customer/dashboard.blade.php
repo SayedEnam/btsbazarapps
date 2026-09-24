@@ -2,7 +2,11 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h1 class="h4 mb-1">Welcome, {{ auth()->user()->name }}</h1>
-            <p class="text-muted mb-0">Here's a snapshot of your Monthly Bazar membership.</p>
+            @if ($customer?->referral?->officer)
+                <p class="text-muted mb-0">Your officer: {{ $customer->referral->officer->name }}@if ($customer->referral->officer->officer?->designation?->name) - {{ $customer->referral->officer->officer->designation->name }}@endif</p>
+            @else
+                <p class="text-muted mb-0">Here's a snapshot of your Monthly Bazar membership.</p>
+            @endif
         </div>
     </div>
 
@@ -44,7 +48,6 @@
                     <div class="text-muted small mb-2">Referral Officer</div>
                     @if ($customer?->referral?->officer)
                         <div class="fw-semibold">{{ $customer->referral->officer->name }}</div>
-                        <div class="text-muted small">{{ $customer->referral->officer->officer?->designation?->name ?? 'N/A' }}</div>
                     @else
                         <div class="text-muted">None</div>
                     @endif
