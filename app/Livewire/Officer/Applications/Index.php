@@ -100,6 +100,12 @@ class Index extends Component
 
     public function updateRole(int $applicationId, ?string $roleId): void
     {
+        if (in_array($roleId, [\App\Models\Role::ADMIN, \App\Models\Role::SUPER_ADMIN], true)) {
+            $this->dispatch('notify', type: 'error', message: 'Admin and Superadmin roles are not allowed here.');
+
+            return;
+        }
+
         $application = $this->ownApplicationOrFail($applicationId);
         $user = $application->customer?->user;
 
@@ -150,7 +156,7 @@ class Index extends Component
         return view('livewire.officer.applications.index', [
             'applications' => $applications,
             'designations' => Designation::orderBy('name')->get(),
-            'roles' => \App\Models\Role::orderBy('name')->get(),
+            'roles' => \App\Models\Role::query()->whereNotIn('slug', [\App\Models\Role::ADMIN, \App\Models\Role::SUPER_ADMIN])->orderBy('name')->get(),
         ]);
     }
 }
