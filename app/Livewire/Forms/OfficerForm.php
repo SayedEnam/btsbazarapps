@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 use Livewire\WithFileUploads;
@@ -132,7 +133,16 @@ class OfficerForm extends Form
                 $officerRole = Role::where('slug', Role::MARKETING_OFFICER)->firstOrFail();
                 $user->roles()->syncWithoutDetaching([$officerRole->id]);
 
-                $user->referral_code = User::generateReferralCode();
+                $baseReferralCode = Str::slug($this->username) . '-referral';
+                $referralCode = $baseReferralCode;
+                $counter = 1;
+
+                while (User::where('referral_code', $referralCode)->exists()) {
+                    $referralCode = $baseReferralCode . '-' . $counter;
+                    $counter++;
+                }
+
+                $user->referral_code = $referralCode;
                 $user->save();
             }
 
