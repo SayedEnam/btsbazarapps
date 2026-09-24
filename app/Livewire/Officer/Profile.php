@@ -62,7 +62,7 @@ class Profile extends Component
 
         return view('livewire.officer.profile', [
             'officer' => $officer,
-            'referralLink' => route('referral.capture', Auth::user()->referral_code),
+            'referralLink' => Auth::user()->referral_code ? route('referral.capture', Auth::user()->referral_code) : '#',
         ]);
     }
 }

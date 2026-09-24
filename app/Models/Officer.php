@@ -61,7 +61,9 @@ class Officer extends Model
 
     public function referralLink(): string
     {
-        return route('referral.capture', $this->user->referral_code);
+        return $this->user->referral_code
+            ? route('referral.capture', $this->user->referral_code)
+            : '#';
     }
 
     public function profilePictureUrl(): ?string
