@@ -92,15 +92,7 @@ class Index extends Component
     public function updateDesignation(int $applicationId, ?int $designationId): void
     {
         $application = $this->ownApplicationOrFail($applicationId);
-        $officer = $application->officer->officer;
-
-        if (! $officer) {
-            $this->dispatch('notify', type: 'error', message: 'Officer profile not found for this application.');
-
-            return;
-        }
-
-        $officer->update(['designation_id' => $designationId]);
+        $application->update(['designation_id' => $designationId]);
         $this->dispatch('notify', type: 'success', message: 'Designation updated successfully.');
     }
 
@@ -121,7 +113,7 @@ class Index extends Component
     {
         $applications = Application::query()
             ->where('officer_id', Auth::id())
-            ->with(['customer.user', 'package', 'officer.officer.designation'])
+            ->with(['customer.user', 'package', 'designation'])
             ->when($this->search, fn ($query) => $query->where(function ($q) {
                 $q->where('application_number', 'like', "%{$this->search}%")
                     ->orWhereHas('customer.user', function ($uq) {

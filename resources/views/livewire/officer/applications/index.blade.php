@@ -49,7 +49,7 @@
                                     <select class="form-select form-select-sm" wire:change="updateDesignation({{ $application->id }}, $event.target.value)">
                                         <option value="">No Designation</option>
                                         @foreach ($designations as $designation)
-                                            <option value="{{ $designation->id }}" {{ ($application->officer->officer->designation_id ?? null) == $designation->id ? 'selected' : '' }}>
+                                            <option value="{{ $designation->id }}" {{ ($application->designation_id ?? null) == $designation->id ? 'selected' : '' }}>
                                                 {{ $designation->name }}
                                             </option>
                                         @endforeach

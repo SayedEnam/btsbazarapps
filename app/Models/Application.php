@@ -20,6 +20,7 @@ class Application extends Model
         'officer_id',
         'package_id',
         'package_price',
+        'designation_id',
         'application_date',
         'status',
         'reviewed_by',
@@ -51,6 +52,11 @@ class Application extends Model
     public function package(): BelongsTo
     {
         return $this->belongsTo(Package::class);
+    }
+
+    public function designation(): BelongsTo
+    {
+        return $this->belongsTo(Designation::class);
     }
 
     public function reviewedBy(): BelongsTo
