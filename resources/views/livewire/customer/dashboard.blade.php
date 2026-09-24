@@ -44,6 +44,7 @@
                     <div class="text-muted small mb-2">Referral Officer</div>
                     @if ($customer?->referral?->officer)
                         <div class="fw-semibold">{{ $customer->referral->officer->name }}</div>
+                        <div class="text-muted small">{{ $customer->referral->officer->officer?->designation?->name ?? 'N/A' }}</div>
                     @else
                         <div class="text-muted">None</div>
                     @endif

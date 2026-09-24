@@ -19,7 +19,7 @@ class Dashboard extends Component
     public function render()
     {
         $user = Auth::user();
-        $customer = $user->customer()->with(['referral.officer', 'applications' => fn ($q) => $q->latest('application_date')->with('package')])->first();
+        $customer = $user->customer()->with(['referral.officer.officer.designation', 'applications' => fn ($q) => $q->latest('application_date')->with('package')])->first();
 
         return view('livewire.customer.dashboard', [
             'customer' => $customer,
