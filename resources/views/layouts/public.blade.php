@@ -78,7 +78,7 @@
             background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 55%, var(--brand-light) 100%);
             color: #fff;
         }
-        .hero .carousel-item { min-height: 560px; }
+        .hero .carousel-item { min-height: 445px; }
         .hero .carousel-item.active { display: flex; align-items: center; }
         .hero .carousel-item > .container { width: 100%; }
         .hero-nav-btn { width: 42px; height: 42px; }
