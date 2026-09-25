@@ -1,9 +1,9 @@
 <div>
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h4 mb-1">Welcome, {{ auth()->user()->name }}</h1>
+            <h1 class="h4 mb-1">Welcome, 
             @if ($customer?->referral?->officer)
-                <p class="text-muted mb-0">{{ $latestApplication?->designation?->name ?? '' }} {{ $customer->referral->officer->name }}</p>
+                {{ $latestApplication?->designation?->name ?? '' }} {{ auth()->user()->name }}</h1>
             @else
                 <p class="text-muted mb-0">Here's a snapshot of your Monthly Bazar membership.</p>
             @endif
