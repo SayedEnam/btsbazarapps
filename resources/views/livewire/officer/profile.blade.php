@@ -68,6 +68,11 @@
                             <input type="text" wire:model="phone" class="form-control @error('phone') is-invalid @enderror">
                             @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Referral Code</label>
+                            <input type="text" wire:model="referral_code" class="form-control @error('referral_code') is-invalid @enderror">
+                            @error('referral_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
                         <button type="submit" class="btn btn-brand">Save Changes</button>
                     </form>
                 </div>

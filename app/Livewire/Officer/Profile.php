@@ -21,6 +21,8 @@ class Profile extends Component
 
     public ?string $phone = '';
 
+    public ?string $referral_code = '';
+
     public UpdatePasswordForm $passwordForm;
 
     public function mount(): void
@@ -31,6 +33,7 @@ class Profile extends Component
         $this->email = $user->email;
         $this->username = (string) $user->username;
         $this->phone = $user->phone;
+        $this->referral_code = $user->referral_code;
     }
 
     public function updateProfile(): void
@@ -42,6 +45,7 @@ class Profile extends Component
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'username' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9._-]+$/', Rule::unique('users', 'username')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:20', Rule::unique('users', 'phone')->ignore($user->id)],
+            'referral_code' => ['nullable', 'string', 'max:255', Rule::unique('users', 'referral_code')->ignore($user->id)],
         ]);
 
         $user->update($validated);
