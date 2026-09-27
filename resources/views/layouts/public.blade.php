@@ -155,8 +155,8 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('how-it-works') ? 'active' : '' }}" href="{{ route('how-it-works') }}" wire:navigate>How It Works</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}" wire:navigate>Contact</a></li>
                 <li class="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex gap-2">
-                    <a href="{{ route('login') }}" class="btn btn-outline-brand btn-sm px-3" wire:navigate>Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-brand btn-sm px-3" wire:navigate>Register</a>
+                    <a href="{{ route('login') }}" class="btn btn-outline-brand btn-sm px-3">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-brand btn-sm px-3">Register</a>
                 </li>
             </ul>
         </div>
