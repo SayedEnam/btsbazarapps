@@ -12,10 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(\App\Http\Middleware\EnsureUserIsActive::class);
-
-        $middleware->web(function (Middleware $middleware): void {
-            $middleware->append(\App\Http\Middleware\NoCache::class);
-        });
+        $middleware->appendToGroup('web', \App\Http\Middleware\NoCache::class);
 
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
