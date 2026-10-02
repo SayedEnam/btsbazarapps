@@ -33,7 +33,8 @@
                             <th>Referral Code</th>
                             <th>Package</th>
                             <th>Price</th>
-                            <th>Registered</th>
+                            <th>Reg. Date</th>
+                            <th>Reg. Member</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -60,6 +61,13 @@
                                 <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
                                 <td>
                                     @if ($referral->customer)
+                                        <span class="badge bg-success">Yes</span>
+                                    @else
+                                        <span class="text-muted">No</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
                                     @else
                                         <span class="text-muted">-</span>
@@ -68,7 +76,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
+                                <td colspan="9" class="text-center text-muted py-4">
                                     No referrals found.
                                 </td>
                             </tr>
