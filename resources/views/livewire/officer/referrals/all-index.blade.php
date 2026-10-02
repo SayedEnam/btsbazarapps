@@ -36,7 +36,7 @@
                             <tr wire:key="referral-{{ $referral->id }}">
                                 <td>{{ $referral->customer?->user?->name ?? 'Unknown customer' }}</td>
                                 <td>{{ $referral->customer?->user?->phone ?: '-' }}</td>
-                                <td><code>{{ $referral->referral_code }}</code></td>
+                                <td><code>{{ $referral->customer?->user?->referral_code ?? '-' }}</code></td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
