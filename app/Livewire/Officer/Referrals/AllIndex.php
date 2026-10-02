@@ -49,6 +49,8 @@ class AllIndex extends Component
 
         $counts = [];
         $treeCounts = [];
+        $allTreeCodes = collect();
+
         if (! empty($referralCodes)) {
             $counts = Referral::whereIn('referral_code', $referralCodes)
                 ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
@@ -57,19 +59,29 @@ class AllIndex extends Component
                 ->all();
 
             foreach ($referralCodes as $code) {
-                $treeCounts[$code] = $this->getTreeMemberCount($code);
+                $treeCodes = $this->getTreeReferralCodes($code);
+                $treeCounts[$code] = Referral::whereIn('referral_code', $treeCodes)->count();
+                $allTreeCodes = $allTreeCodes->merge($treeCodes);
             }
         }
 
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
             'totalReferrals' => Referral::where('officer_id', Auth::id())->count(),
+            'allMemberCount' => $allTreeCodes->unique()->isNotEmpty() ? Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() : 0,
             'referralCounts' => $counts,
             'treeCounts' => $treeCounts,
         ]);
     }
 
     private function getTreeMemberCount(string $rootCode): int
+    {
+        $codes = $this->getTreeReferralCodes($rootCode);
+
+        return Referral::whereIn('referral_code', $codes)->count();
+    }
+
+    private function getTreeReferralCodes(string $rootCode): array
     {
         $codes = collect([$rootCode]);
         $queue = collect([$rootCode]);
@@ -99,6 +111,6 @@ class AllIndex extends Component
             }
         }
 
-        return Referral::whereIn('referral_code', $codes->unique()->values()->all())->count();
+        return $codes->unique()->values()->all();
     }
 }

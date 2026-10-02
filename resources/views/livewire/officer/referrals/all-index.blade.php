@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h1 class="h4 mb-0">All Referrals</h1>
-            <p class="text-muted mb-0 small">Total Registered: <strong>{{ $totalReferrals }}</strong></p>
+            <p class="text-muted mb-0 small">Total Member: <strong>{{ $totalReferrals }}</strong> &nbsp;|&nbsp; All Member: <strong>{{ $allMemberCount }}</strong></p>
         </div>
     </div>
 
