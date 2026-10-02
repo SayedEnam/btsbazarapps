@@ -44,9 +44,21 @@ class AllIndex extends Component
             ->latest('registered_at')
             ->paginate(10);
 
+        $referralCodes = $referrals->pluck('customer.user.referral_code')->filter()->unique()->values()->all();
+
+        $counts = [];
+        if (! empty($referralCodes)) {
+            $counts = Referral::whereIn('referral_code', $referralCodes)
+                ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+                ->groupBy('referral_code')
+                ->pluck('total', 'referral_code')
+                ->all();
+        }
+
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
             'totalReferrals' => Referral::where('officer_id', Auth::id())->count(),
+            'referralCounts' => $counts,
         ]);
     }
 }

@@ -59,13 +59,7 @@
                                 <td>{{ $referral->customer?->applications->sortByDesc('application_date')->first()?->package?->name ?? '-' }}</td>
                                 <td>৳{{ number_format((float) $referral->customer?->applications->sortByDesc('application_date')->first()?->package_price ?? 0, 2) }}</td>
                                 <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
-                                <td>
-                                    @if ($referral->customer)
-                                        <span class="badge bg-success">Yes</span>
-                                    @else
-                                        <span class="text-muted">No</span>
-                                    @endif
-                                </td>
+                                <td>{{ $referralCounts[$referral->customer?->user?->referral_code] ?? 0 }}</td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
