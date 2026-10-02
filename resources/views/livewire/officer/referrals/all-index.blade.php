@@ -33,8 +33,8 @@
                             <th>Referral Code</th>
                             <th>Package</th>
                             <th>Price</th>
-                            <th>Membership Status</th>
                             <th>Registered</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +57,7 @@
                                 <td><code>{{ $referral->customer?->user?->referral_code ?? '-' }}</code></td>
                                 <td>{{ $referral->customer?->applications->sortByDesc('application_date')->first()?->package?->name ?? '-' }}</td>
                                 <td>৳{{ number_format((float) $referral->customer?->applications->sortByDesc('application_date')->first()?->package_price ?? 0, 2) }}</td>
+                                <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
@@ -64,7 +65,6 @@
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
-                                <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
                             </tr>
                         @empty
                             <tr>
