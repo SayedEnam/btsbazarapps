@@ -33,7 +33,7 @@ class AllIndex extends Component
     {
         $referrals = Referral::query()
             ->where('officer_id', Auth::id())
-            ->with(['customer.user', 'officer'])
+            ->with(['customer.user', 'officer.officer.designation'])
             ->when($this->search, fn ($query) => $query->whereHas('customer.user', function ($q) {
                 $q->where('name', 'like', "%{$this->search}%")
                     ->orWhere('phone', 'like', "%{$this->search}%");

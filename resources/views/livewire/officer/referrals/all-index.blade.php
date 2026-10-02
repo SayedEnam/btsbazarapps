@@ -25,6 +25,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Designation</th>
                             <th>Mobile</th>
                             <th>Referral Code</th>
                             <th>Membership Status</th>
@@ -35,6 +36,7 @@
                         @forelse ($referrals as $referral)
                             <tr wire:key="referral-{{ $referral->id }}">
                                 <td>{{ $referral->customer?->user?->name ?? 'Unknown customer' }}</td>
+                                <td>{{ $referral->officer?->officer?->designation?->name ?? '-' }}</td>
                                 <td>{{ $referral->customer?->user?->phone ?: '-' }}</td>
                                 <td><code>{{ $referral->customer?->user?->referral_code ?? '-' }}</code></td>
                                 <td>
@@ -48,7 +50,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     No referrals found.
                                 </td>
                             </tr>
