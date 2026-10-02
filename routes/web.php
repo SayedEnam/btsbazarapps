@@ -37,6 +37,7 @@ use App\Livewire\Officer\Dashboard as OfficerDashboard;
 use App\Livewire\Officer\Profile as OfficerProfile;
 use App\Livewire\Officer\Referrals\AllIndex as OfficerReferralsAllIndex;
 use App\Livewire\Officer\Referrals\CustomerDetail as OfficerReferralCustomerDetail;
+use App\Livewire\Officer\Referrals\CustomerReferrals as OfficerCustomerReferrals;
 use App\Livewire\Officer\Referrals\Index as OfficerReferralsIndex;
 use App\Livewire\Public\Register;
 use App\Models\Role;
@@ -117,6 +118,7 @@ Route::middleware(['auth', 'role:'.Role::MARKETING_OFFICER])
           Route::get('dashboard', OfficerDashboard::class)->name('dashboard');
           Route::get('referrals/all', OfficerReferralsAllIndex::class)->name('referrals.all');
           Route::get('referrals/{customerId}', OfficerReferralCustomerDetail::class)->name('referrals.customer');
+          Route::get('referrals/{customerId}/list', OfficerCustomerReferrals::class)->name('referrals.customer.list');
           Route::get('referrals', OfficerReferralsIndex::class)->name('referrals.index');
           Route::get('applications', OfficerApplicationsIndex::class)->name('applications.index');
           Route::get('profile', OfficerProfile::class)->name('profile');
