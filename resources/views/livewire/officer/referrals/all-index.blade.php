@@ -31,6 +31,8 @@
                             <th>Designation</th>
                             <th>Mobile</th>
                             <th>Referral Code</th>
+                            <th>Package</th>
+                            <th>Price</th>
                             <th>Membership Status</th>
                             <th>Registered</th>
                         </tr>
@@ -53,6 +55,8 @@
                                 </td>
                                 <td>{{ $referral->customer?->user?->phone ?: '-' }}</td>
                                 <td><code>{{ $referral->customer?->user?->referral_code ?? '-' }}</code></td>
+                                <td>{{ $referral->customer?->applications->sortByDesc('application_date')->first()?->package?->name ?? '-' }}</td>
+                                <td>৳{{ number_format((float) $referral->customer?->applications->sortByDesc('application_date')->first()?->package_price ?? 0, 2) }}</td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
@@ -64,7 +68,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">
+                                <td colspan="8" class="text-center text-muted py-4">
                                     No referrals found.
                                 </td>
                             </tr>
