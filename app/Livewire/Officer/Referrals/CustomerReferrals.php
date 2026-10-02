@@ -38,7 +38,6 @@ class CustomerReferrals extends Component
     public function render()
     {
         $referrals = Referral::query()
-            ->where('officer_id', $this->customer->referral->officer_id)
             ->where('referral_code', $this->customer->user->referral_code)
             ->with(['customer.user', 'customer.applications.designation'])
             ->when($this->search, fn ($query) => $query->whereHas('customer.user', function ($q) {
