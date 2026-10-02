@@ -46,6 +46,7 @@ class AllIndex extends Component
 
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
+            'totalReferrals' => Referral::where('officer_id', Auth::id())->count(),
         ]);
     }
 }

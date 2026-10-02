@@ -1,6 +1,9 @@
 <div>
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <h1 class="h4 mb-0">All Referrals</h1>
+        <div>
+            <h1 class="h4 mb-0">All Referrals</h1>
+            <p class="text-muted mb-0 small">Total Users: <strong>{{ $totalReferrals }}</strong></p>
+        </div>
     </div>
 
     <div class="card">
