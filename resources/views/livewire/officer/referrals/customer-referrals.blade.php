@@ -26,6 +26,7 @@
                             <th>Package</th>
                             <th>Price</th>
                             <th>Reg. Date</th>
+                            <th>Reg. Member</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -50,6 +51,7 @@
                                 <td>{{ $referral->customer?->applications->sortByDesc('application_date')->first()?->package?->name ?? '-' }}</td>
                                 <td>৳{{ number_format((float) $referral->customer?->applications->sortByDesc('application_date')->first()?->package_price ?? 0, 2) }}</td>
                                 <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
+                                <td>{{ $referralCounts[$referral->customer?->user?->referral_code] ?? 0 }}</td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
@@ -60,7 +62,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">
+                                <td colspan="8" class="text-center text-muted py-4">
                                     No referrals found for this user.
                                 </td>
                             </tr>

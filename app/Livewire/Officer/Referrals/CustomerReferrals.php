@@ -87,10 +87,20 @@ class CustomerReferrals extends Component
             ->latest('registered_at')
             ->paginate(10);
 
+        $counts = [];
+        if (! empty($referralCodes)) {
+            $counts = Referral::whereIn('referral_code', $referralCodes)
+                ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+                ->groupBy('referral_code')
+                ->pluck('total', 'referral_code')
+                ->all();
+        }
+
         return view('livewire.officer.referrals.customer-referrals', [
             'customer' => $this->customer,
             'referrals' => $referrals,
             'totalReferrals' => Referral::whereIn('referral_code', $referralCodes)->count(),
+            'referralCounts' => $counts,
         ]);
     }
 
