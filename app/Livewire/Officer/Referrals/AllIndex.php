@@ -45,7 +45,8 @@ class AllIndex extends Component
             ->latest('registered_at')
             ->paginate(10);
 
-        $referralCodes = $referrals->pluck('customer.user.referral_code')->filter()->unique()->values()->all();
+        $allOfficerReferrals = Referral::where('officer_id', Auth::id())->get();
+        $referralCodes = $allOfficerReferrals->pluck('customer.user.referral_code')->filter()->unique()->values()->all();
 
         $counts = [];
         $treeCounts = [];
@@ -67,7 +68,7 @@ class AllIndex extends Component
 
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
-            'totalReferrals' => Referral::where('officer_id', Auth::id())->count(),
+            'totalReferrals' => $allOfficerReferrals->count(),
             'allMemberCount' => $allTreeCodes->unique()->isNotEmpty() ? Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() : 0,
             'referralCounts' => $counts,
             'treeCounts' => $treeCounts,
