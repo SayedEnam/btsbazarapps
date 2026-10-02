@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h1 class="h4 mb-0">All Referrals</h1>
-            <p class="text-muted mb-0 small">Total Member: <strong>{{ $totalReferrals }}</strong> &nbsp;|&nbsp; All Member: <strong>{{ $allMemberCount }}</strong></p>
+            <p class="text-muted mb-0 small">Direct Members: <strong>{{ $totalReferrals }}</strong> &nbsp;|&nbsp; Indirect Members: <strong>{{ $allMemberCount }}</strong></p>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
                             <th>Package</th>
                             <th>Price</th>
                             <th>Reg. Date</th>
-                            <th>Total Referral Members</th>
+                            <th>Members</th>
                             <th>Status</th>
                         </tr>
                     </thead>

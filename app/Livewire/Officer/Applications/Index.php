@@ -103,17 +103,19 @@ class Index extends Component
 
     public function updateRole(int $applicationId, ?string $roleId): void
     {
-        if (in_array($roleId, [Role::ADMIN, Role::SUPER_ADMIN], true)) {
-            $this->dispatch('notify', type: 'error', message: 'Admin and Superadmin roles are not allowed here.');
-
-            return;
-        }
-
         $application = $this->ownApplicationOrFail($applicationId);
         $user = $application->customer?->user;
 
         if (! $user) {
             $this->dispatch('notify', type: 'error', message: 'User not found for this application.');
+
+            return;
+        }
+
+        $role = $roleId ? Role::find($roleId) : null;
+
+        if ($role && in_array($role->slug, [Role::ADMIN, Role::SUPER_ADMIN], true)) {
+            $this->dispatch('notify', type: 'error', message: 'Admin and Superadmin roles are not allowed here.');
 
             return;
         }
@@ -124,7 +126,9 @@ class Index extends Component
             $user->roles()->detach();
         }
 
-        if ($roleId === Role::MARKETING_OFFICER && ! $user->referral_code) {
+        if (! $role || $role->slug === Role::CUSTOMER) {
+            $user->update(['referral_code' => null]);
+        } elseif ($role->slug === Role::MARKETING_OFFICER && ! $user->referral_code) {
             $baseReferralCode = Str::slug($user->username ?? $user->name) . '-referral';
             $referralCode = $baseReferralCode;
             $counter = 1;

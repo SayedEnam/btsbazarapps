@@ -105,11 +105,18 @@ class CustomerReferrals extends Component
             }
         }
 
+        $totalReferrals = Referral::where('referral_code', $rootCode)->count();
+        $allMemberCount = 0;
+
+        if ($allTreeCodes->unique()->isNotEmpty()) {
+            $allMemberCount = max(0, Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() - $totalReferrals);
+        }
+
         return view('livewire.officer.referrals.customer-referrals', [
             'customer' => $this->customer,
             'referrals' => $referrals,
-            'totalReferrals' => Referral::where('referral_code', $rootCode)->count(),
-            'allMemberCount' => $allTreeCodes->unique()->isNotEmpty() ? Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() : 0,
+            'totalReferrals' => $totalReferrals,
+            'allMemberCount' => $allMemberCount,
             'referralCounts' => $counts,
             'treeCounts' => $treeCounts,
         ]);
