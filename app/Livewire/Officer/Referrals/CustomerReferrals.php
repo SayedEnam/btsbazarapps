@@ -50,6 +50,7 @@ class CustomerReferrals extends Component
         return view('livewire.officer.referrals.customer-referrals', [
             'customer' => $this->customer,
             'referrals' => $referrals,
+            'totalReferrals' => Referral::where('referral_code', $this->customer->user->referral_code)->count(),
         ]);
     }
 }

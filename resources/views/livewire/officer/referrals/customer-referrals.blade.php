@@ -3,6 +3,7 @@
         <div>
             <h1 class="h4 mb-0">{{ $customer->user?->name }}'s Referrals</h1>
             <p class="text-muted mb-0">Users registered with referral code: <code>{{ $customer->user?->referral_code }}</code></p>
+            <p class="text-muted mb-0 small">Total Users: <strong>{{ $totalReferrals }}</strong></p>
         </div>
         <a href="{{ route('officer.referrals.all') }}" class="btn btn-outline-secondary btn-sm" wire:navigate>Back</a>
     </div>
