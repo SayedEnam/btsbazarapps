@@ -91,8 +91,8 @@ class AllIndex extends Component
         while ($queue->isNotEmpty()) {
             $code = $queue->shift();
 
-            $children = User::whereHas('roles', fn ($q) => $q->where('slug', \App\Models\Role::MARKETING_OFFICER))
-                ->where('referral_code', '!=', $code)
+            $children = User::where('referral_code', '!=', $code)
+                ->whereNotNull('referral_code')
                 ->whereIn('id', function ($query) use ($code) {
                     $query->select('user_id')
                         ->from('customers')
@@ -100,7 +100,6 @@ class AllIndex extends Component
                             $q2->select('customer_id')->from('referrals')->where('referral_code', $code);
                         });
                 })
-                ->whereNotNull('referral_code')
                 ->pluck('referral_code')
                 ->filter()
                 ->unique()
