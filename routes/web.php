@@ -35,6 +35,7 @@ use App\Livewire\Customer\Profile as CustomerProfile;
 use App\Livewire\Officer\Applications\Index as OfficerApplicationsIndex;
 use App\Livewire\Officer\Dashboard as OfficerDashboard;
 use App\Livewire\Officer\Profile as OfficerProfile;
+use App\Livewire\Officer\Referrals\AllIndex as OfficerReferralsAllIndex;
 use App\Livewire\Officer\Referrals\Index as OfficerReferralsIndex;
 use App\Livewire\Public\Register;
 use App\Models\Role;
@@ -111,9 +112,10 @@ Route::middleware(['auth', 'role:'.Role::CUSTOMER])
 Route::middleware(['auth', 'role:'.Role::MARKETING_OFFICER])
     ->prefix('officer')
     ->name('officer.')
-    ->group(function () {
-        Route::get('dashboard', OfficerDashboard::class)->name('dashboard');
-        Route::get('referrals', OfficerReferralsIndex::class)->name('referrals.index');
-        Route::get('applications', OfficerApplicationsIndex::class)->name('applications.index');
-        Route::get('profile', OfficerProfile::class)->name('profile');
-    });
+      ->group(function () {
+          Route::get('dashboard', OfficerDashboard::class)->name('dashboard');
+          Route::get('referrals/all', OfficerReferralsAllIndex::class)->name('referrals.all');
+          Route::get('referrals', OfficerReferralsIndex::class)->name('referrals.index');
+          Route::get('applications', OfficerApplicationsIndex::class)->name('applications.index');
+          Route::get('profile', OfficerProfile::class)->name('profile');
+      });

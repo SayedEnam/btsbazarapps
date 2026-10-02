@@ -75,6 +75,9 @@
                     <a class="nav-link {{ request()->routeIs('officer.dashboard') ? 'active' : '' }}" href="{{ route('officer.dashboard') }}" wire:navigate>Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('officer.referrals.all') ? 'active' : '' }}" href="{{ route('officer.referrals.all') }}" wire:navigate>All Referrals</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('officer.referrals.index') ? 'active' : '' }}" href="{{ route('officer.referrals.index') }}" wire:navigate>My Referrals</a>
                 </li>
                 <li class="nav-item">
