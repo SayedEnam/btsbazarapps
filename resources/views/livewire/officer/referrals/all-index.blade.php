@@ -36,7 +36,12 @@
                         @forelse ($referrals as $referral)
                             <tr wire:key="referral-{{ $referral->id }}">
                                 <td>{{ $referral->customer?->user?->name ?? 'Unknown customer' }}</td>
-                                <td>{{ $referral->officer?->officer?->designation?->name ?? '-' }}</td>
+                                <td>
+                                    @php
+                                        $application = $referral->customer?->applications->sortByDesc('application_date')->first();
+                                    @endphp
+                                    {{ $application?->designation?->name ?? '-' }}
+                                </td>
                                 <td>{{ $referral->customer?->user?->phone ?: '-' }}</td>
                                 <td><code>{{ $referral->customer?->user?->referral_code ?? '-' }}</code></td>
                                 <td>
