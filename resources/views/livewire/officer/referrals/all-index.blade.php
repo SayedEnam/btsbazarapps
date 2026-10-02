@@ -43,6 +43,7 @@
                             <tr wire:key="referral-{{ $referral->id }}">
                                 <td>
                                     @if ($referral->customer?->user)
+                                        <i class="bi bi-person me-1 text-muted"></i>
                                         <a href="{{ route('officer.referrals.customer.list', $referral->customer->id) }}" wire:navigate class="text-decoration-none">{{ $referral->customer->user->name }}</a>
                                     @else
                                         Unknown customer
