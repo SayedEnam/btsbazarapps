@@ -88,12 +88,17 @@ class CustomerReferrals extends Component
             ->paginate(10);
 
         $counts = [];
+        $treeCounts = [];
         if (! empty($referralCodes)) {
             $counts = Referral::whereIn('referral_code', $referralCodes)
                 ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
                 ->groupBy('referral_code')
                 ->pluck('total', 'referral_code')
                 ->all();
+
+            foreach ($referralCodes as $code) {
+                $treeCounts[$code] = $this->getTreeMemberCount($code);
+            }
         }
 
         return view('livewire.officer.referrals.customer-referrals', [
@@ -101,6 +106,7 @@ class CustomerReferrals extends Component
             'referrals' => $referrals,
             'totalReferrals' => Referral::whereIn('referral_code', $referralCodes)->count(),
             'referralCounts' => $counts,
+            'treeCounts' => $treeCounts,
         ]);
     }
 
@@ -135,5 +141,38 @@ class CustomerReferrals extends Component
         }
 
         return $codes->unique()->values()->all();
+    }
+
+    private function getTreeMemberCount(string $rootCode): int
+    {
+        $codes = collect([$rootCode]);
+        $queue = collect([$rootCode]);
+        $seen = collect([$rootCode]);
+
+        while ($queue->isNotEmpty()) {
+            $code = $queue->shift();
+
+            $children = User::whereHas('roles', fn ($q) => $q->where('slug', \App\Models\Role::MARKETING_OFFICER))
+                ->where('referral_code', '!=', $code)
+                ->whereIn('id', function ($query) use ($code) {
+                    $query->select('officer_id')->from('referrals')->where('referral_code', $code);
+                })
+                ->whereNotNull('referral_code')
+                ->pluck('referral_code')
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+
+            foreach ($children as $childCode) {
+                if (! $seen->contains($childCode)) {
+                    $seen->push($childCode);
+                    $codes->push($childCode);
+                    $queue->push($childCode);
+                }
+            }
+        }
+
+        return Referral::whereIn('referral_code', $codes->unique()->values()->all())->count();
     }
 }
