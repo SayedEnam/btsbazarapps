@@ -75,10 +75,9 @@ class CustomerReferrals extends Component
     public function render()
     {
         $rootCode = $this->customer->user->referral_code;
-        $referralCodes = $rootCode ? $this->getReferralCodes($rootCode) : [];
 
         $referrals = Referral::query()
-            ->whereIn('referral_code', $referralCodes)
+            ->where('referral_code', $rootCode)
             ->with(['customer.user', 'customer.applications.designation'])
             ->when($this->search, fn ($query) => $query->whereHas('customer.user', function ($q) {
                 $q->where('name', 'like', "%{$this->search}%")
@@ -87,28 +86,29 @@ class CustomerReferrals extends Component
             ->latest('registered_at')
             ->paginate(10);
 
+        $treeCodes = $rootCode ? $this->getTreeReferralCodes($rootCode) : [];
         $counts = [];
         $treeCounts = [];
         $allTreeCodes = collect();
 
-        if (! empty($referralCodes)) {
-            $counts = Referral::whereIn('referral_code', $referralCodes)
+        if (! empty($treeCodes)) {
+            $counts = Referral::whereIn('referral_code', $treeCodes)
                 ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
                 ->groupBy('referral_code')
                 ->pluck('total', 'referral_code')
                 ->all();
 
-            foreach ($referralCodes as $code) {
-                $treeCodes = $this->getTreeReferralCodes($code);
-                $treeCounts[$code] = Referral::whereIn('referral_code', $treeCodes)->count();
-                $allTreeCodes = $allTreeCodes->merge($treeCodes);
+            foreach ($treeCodes as $code) {
+                $branchCodes = $this->getTreeReferralCodes($code);
+                $treeCounts[$code] = Referral::whereIn('referral_code', $branchCodes)->count();
+                $allTreeCodes = $allTreeCodes->merge($branchCodes);
             }
         }
 
         return view('livewire.officer.referrals.customer-referrals', [
             'customer' => $this->customer,
             'referrals' => $referrals,
-            'totalReferrals' => Referral::whereIn('referral_code', $referralCodes)->count(),
+            'totalReferrals' => Referral::where('referral_code', $rootCode)->count(),
             'allMemberCount' => $allTreeCodes->unique()->isNotEmpty() ? Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() : 0,
             'referralCounts' => $counts,
             'treeCounts' => $treeCounts,
