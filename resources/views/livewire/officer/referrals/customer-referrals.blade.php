@@ -25,7 +25,7 @@
                             <th>Mobile</th>
                             <th>Package</th>
                             <th>Price</th>
-                            <th>Registered</th>
+                            <th>Reg. Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>
