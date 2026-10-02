@@ -132,7 +132,11 @@ class CustomerReferrals extends Component
             $children = User::whereHas('roles', fn ($q) => $q->where('slug', \App\Models\Role::MARKETING_OFFICER))
                 ->where('referral_code', '!=', $code)
                 ->whereIn('id', function ($query) use ($code) {
-                    $query->select('officer_id')->from('referrals')->where('referral_code', $code);
+                    $query->select('user_id')
+                        ->from('customers')
+                        ->whereIn('id', function ($q2) use ($code) {
+                            $q2->select('customer_id')->from('referrals')->where('referral_code', $code);
+                        });
                 })
                 ->whereNotNull('referral_code')
                 ->pluck('referral_code')
