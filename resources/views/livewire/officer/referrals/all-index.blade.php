@@ -26,6 +26,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Mobile</th>
+                            <th>Referral Code</th>
                             <th>Membership Status</th>
                             <th>Registered</th>
                         </tr>
@@ -35,6 +36,7 @@
                             <tr wire:key="referral-{{ $referral->id }}">
                                 <td>{{ $referral->customer?->user?->name ?? 'Unknown customer' }}</td>
                                 <td>{{ $referral->customer?->user?->phone ?: '-' }}</td>
+                                <td><code>{{ $referral->referral_code }}</code></td>
                                 <td>
                                     @if ($referral->customer)
                                         <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
@@ -46,7 +48,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">
+                                <td colspan="5" class="text-center text-muted py-4">
                                     No referrals found.
                                 </td>
                             </tr>
