@@ -74,7 +74,8 @@ class CustomerReferrals extends Component
 
     public function render()
     {
-        $referralCodes = $this->getReferralCodes($this->customer->user->referral_code);
+        $rootCode = $this->customer->user->referral_code;
+        $referralCodes = $rootCode ? $this->getReferralCodes($rootCode) : [];
 
         $referrals = Referral::query()
             ->whereIn('referral_code', $referralCodes)
