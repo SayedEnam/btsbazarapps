@@ -35,7 +35,13 @@
                     <tbody>
                         @forelse ($referrals as $referral)
                             <tr wire:key="referral-{{ $referral->id }}">
-                                <td>{{ $referral->customer?->user?->name ?? 'Unknown customer' }}</td>
+                                <td>
+                                    @if ($referral->customer?->user)
+                                        <a href="{{ route('officer.referrals.customer', $referral->customer->id) }}" wire:navigate class="text-decoration-none">{{ $referral->customer->user->name }}</a>
+                                    @else
+                                        Unknown customer
+                                    @endif
+                                </td>
                                 <td>
                                     @php
                                         $application = $referral->customer?->applications->sortByDesc('application_date')->first();
