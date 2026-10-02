@@ -44,10 +44,11 @@
                                 <td>৳{{ number_format((float) $referral->customer?->applications->sortByDesc('application_date')->first()?->package_price ?? 0, 2) }}</td>
                                 <td class="text-muted">{{ $referral->registered_at->format('d M Y') }}</td>
                                 <td>
-                                    @if ($referral->customer)
-                                        <span class="badge {{ $referral->customer->status->badgeClass() }}">{{ $referral->customer->status->label() }}</span>
+                                    @if ($referral->customer?->user)
+                                        <i class="bi bi-person me-1 text-muted"></i>
+                                        <a href="{{ route('officer.referrals.customer.list', $referral->customer->id) }}" wire:navigate class="text-decoration-none">{{ $referral->customer->user->name }}</a>
                                     @else
-                                        <span class="text-muted">-</span>
+                                        Unknown customer
                                     @endif
                                 </td>
                             </tr>
