@@ -93,13 +93,64 @@ class AllIndex extends Component
             ];
         });
 
+        $referralTree = Cache::remember("referral.tree.officer.{$officerId}", 300, function () use ($officerId) {
+            return $this->buildReferralTree($officerId);
+        });
+
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
             'totalReferrals' => $stats['totalReferrals'],
             'allMemberCount' => $stats['allMemberCount'],
             'referralCounts' => $stats['referralCounts'],
             'treeCounts' => $stats['treeCounts'],
+            'referralTree' => $referralTree,
         ]);
+    }
+
+    private function buildReferralTree(int $officerId): \Illuminate\Support\Collection
+    {
+        $officer = User::find($officerId);
+
+        if (! $officer || ! $officer->referral_code) {
+            return collect();
+        }
+
+        $rootCode = $officer->referral_code;
+
+        $rootNode = [
+            'name' => $officer->name,
+            'code' => $rootCode,
+            'registered_at' => $officer->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+            'members' => $this->getTreeMemberCount($rootCode),
+            'children' => $this->buildChildren($rootCode),
+        ];
+
+        return collect([$rootNode]);
+    }
+
+    private function buildChildren(string $parentCode): \Illuminate\Support\Collection
+    {
+        $children = collect();
+
+        $directReferrals = Referral::where('referral_code', $parentCode)
+            ->with('customer.user')
+            ->get()
+            ->filter(fn (Referral $r) => $r->customer?->user?->referral_code && $r->customer->user->referral_code !== $parentCode);
+
+        foreach ($directReferrals as $referral) {
+            $user = $referral->customer->user;
+            $childCode = $user->referral_code;
+
+            $children->push([
+                'name' => $user->name,
+                'code' => $childCode,
+                'registered_at' => $referral->registered_at->format('Y-m-d H:i:s'),
+                'members' => $this->getTreeMemberCount($childCode),
+                'children' => $this->buildChildren($childCode),
+            ]);
+        }
+
+        return $children;
     }
 
     private function getTreeMemberCount(string $rootCode): int

@@ -6,6 +6,8 @@
         </div>
     </div>
 
+    @include('livewire.officer.referrals.referral-tree', ['tree' => $referralTree ?? collect()])
+
     <div class="card">
         <div class="card-body">
             <div class="row g-2 mb-3">

@@ -160,6 +160,7 @@ class Index extends Component
 
         foreach ($officerIds as $officerId) {
             Cache::forget("referral.stats.officer.{$officerId}");
+            Cache::forget("referral.tree.officer.{$officerId}");
         }
     }
 

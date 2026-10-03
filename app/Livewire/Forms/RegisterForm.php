@@ -106,6 +106,7 @@ class RegisterForm extends Form
                     ]);
 
                     Cache::forget("referral.stats.officer.{$officer->id}");
+                    Cache::forget("referral.tree.officer.{$officer->id}");
                 }
             }
 
