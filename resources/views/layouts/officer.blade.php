@@ -50,32 +50,6 @@
             width: 44px; height: 44px; border-radius: .65rem;
             display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: #fff;
         }
-        .user-menu-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            margin-top: .5rem;
-            min-width: 180px;
-            z-index: 1050;
-        }
-        .user-menu-dropdown.show {
-            display: block;
-        }
-        .officer-navbar .nav-item.dropdown {
-            position: relative;
-        }
-        .user-menu-dropdown li a {
-            display: block;
-            padding: .5rem 1rem;
-            color: #dc3545;
-            text-decoration: none;
-        }
-        .user-menu-dropdown li a:hover {
-            background-color: #f8f9fa;
-        }
-        .user-menu-dropdown li + li {
-            border-top: 1px solid #eee;
-        }
     </style>
 
     @livewireStyles
@@ -113,18 +87,17 @@
                     <a class="nav-link {{ request()->routeIs('officer.profile') ? 'active' : '' }}" href="{{ route('officer.profile') }}" wire:navigate>My Profile</a>
                 </li>
                 <li class="nav-item dropdown ms-lg-2" wire:ignore>
-                    <button class="nav-link d-flex align-items-center gap-2 user-menu-toggle" type="button" id="officer-user-dropdown-toggle" aria-expanded="false">
+                    <button class="nav-link dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         <span>{{ auth()->user()->name }}</span>
                     </button>
-                    <ul class="user-menu-dropdown dropdown-menu-end shadow-sm" id="officer-user-dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li>
-                            <a class="text-danger text-decoration-none" href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('officer-logout-form').submit();">
-                                <i class="bi bi-box-arrow-right me-2"></i>Logout
-                            </a>
-                            <form id="officer-logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                </button>
                             </form>
                         </li>
                     </ul>
@@ -164,23 +137,6 @@
         document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
             bootstrap.Dropdown.getOrCreateInstance(el);
         });
-    });
-
-    document.addEventListener('click', function (event) {
-        var toggle = event.target.closest('#officer-user-dropdown-toggle');
-        var menu = document.getElementById('officer-user-dropdown-menu');
-
-        if (toggle && menu) {
-            event.preventDefault();
-            event.stopPropagation();
-            menu.classList.toggle('show');
-            toggle.setAttribute('aria-expanded', menu.classList.contains('show'));
-            return;
-        }
-
-        if (menu && !menu.contains(event.target) && !event.target.closest('#officer-user-dropdown-toggle')) {
-            menu.classList.remove('show');
-        }
     });
 </script>
 
