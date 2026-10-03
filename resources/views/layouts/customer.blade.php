@@ -52,13 +52,14 @@
             position: relative;
         }
         .customer-navbar .dropdown-menu {
+            position: absolute;
+            right: 0;
+            left: auto;
             z-index: 1060;
             max-width: 260px;
         }
         @media (max-width: 575.98px) {
             .customer-navbar .dropdown-menu {
-                left: auto;
-                right: 0;
                 max-width: calc(100vw - 2rem);
             }
         }
