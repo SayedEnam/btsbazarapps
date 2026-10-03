@@ -114,17 +114,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.addEventListener('livewire:navigated', () => {
-        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
-            bootstrap.Dropdown.getOrCreateInstance(el);
-        });
-    });
+    function initUserDropdowns() {
+        document.querySelectorAll('.nav-item.dropdown').forEach(function (item) {
+            var toggle = item.querySelector('.dropdown-toggle');
+            var menu = item.querySelector('.dropdown-menu');
+            if (!toggle || !menu) {
+                return;
+            }
 
-    document.addEventListener('livewire:init', () => {
-        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
-            bootstrap.Dropdown.getOrCreateInstance(el);
+            item.addEventListener('mouseenter', function () {
+                menu.classList.add('show');
+                toggle.setAttribute('aria-expanded', 'true');
+            });
+
+            item.addEventListener('mouseleave', function () {
+                menu.classList.remove('show');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
         });
-    });
+    }
+
+    document.addEventListener('livewire:navigated', initUserDropdowns);
+    document.addEventListener('livewire:init', initUserDropdowns);
 </script>
 
 @livewireScripts

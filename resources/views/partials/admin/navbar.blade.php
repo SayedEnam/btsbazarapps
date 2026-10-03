@@ -15,7 +15,7 @@
         @livewire('admin.notification-bell')
 
         <div class="dropdown" wire:ignore>
-            <button class="btn btn-light border d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-light border d-flex align-items-center gap-2" type="button" aria-expanded="false">
                 <span class="avatar-circle">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                 <span class="d-none d-md-inline">{{ $user->name }}</span>
                 <i class="bi bi-chevron-down small"></i>
@@ -29,12 +29,11 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
-                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                    </a>
-                    <form id="admin-logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </button>
                     </form>
                 </li>
             </ul>
