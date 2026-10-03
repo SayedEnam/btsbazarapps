@@ -179,6 +179,25 @@
             width: 48px; height: 48px; border-radius: .75rem;
             display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fff;
         }
+
+        .admin-navbar .dropdown {
+            position: relative;
+        }
+        .admin-navbar .dropdown-menu {
+            z-index: 1060;
+            max-width: 260px;
+        }
+        .admin-navbar .dropdown-menu .dropdown-item-text {
+            white-space: normal;
+            word-break: break-word;
+        }
+        @media (max-width: 575.98px) {
+            .admin-navbar .dropdown-menu {
+                left: auto;
+                right: 0;
+                max-width: calc(100vw - 2rem);
+            }
+        }
     </style>
 
     @livewireStyles

@@ -50,6 +50,20 @@
             width: 44px; height: 44px; border-radius: .65rem;
             display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: #fff;
         }
+        .officer-navbar .dropdown {
+            position: relative;
+        }
+        .officer-navbar .dropdown-menu {
+            z-index: 1060;
+            max-width: 260px;
+        }
+        @media (max-width: 575.98px) {
+            .officer-navbar .dropdown-menu {
+                left: auto;
+                right: 0;
+                max-width: calc(100vw - 2rem);
+            }
+        }
     </style>
 
     @livewireStyles
