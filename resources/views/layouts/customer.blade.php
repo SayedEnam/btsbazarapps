@@ -113,6 +113,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    document.addEventListener('livewire:navigated', () => {
+        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => {
+            if (!el._bootstrapDropdown) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+    });
+</script>
+
 @livewireScripts
 </body>
 </html>

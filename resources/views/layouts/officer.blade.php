@@ -126,6 +126,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
+<script>
+    document.addEventListener('livewire:navigated', () => {
+        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => {
+            if (!el._bootstrapDropdown) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+    });
+</script>
+
 @livewireScripts
 </body>
 </html>
