@@ -90,6 +90,7 @@
                     <button class="nav-link d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         <span>{{ auth()->user()->name }}</span>
+                        <i class="bi bi-box-arrow-right text-muted small"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li>
