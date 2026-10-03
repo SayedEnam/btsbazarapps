@@ -4,9 +4,12 @@
             <h1 class="h4 mb-0">All Referrals</h1>
             <p class="text-muted mb-0 small">Direct Members: <strong>{{ $totalReferrals }}</strong> &nbsp;|&nbsp; Indirect Members: <strong>{{ $allMemberCount }}</strong></p>
         </div>
+        <button class="btn btn-outline-secondary btn-sm" type="button" id="referral-tree-toggle">
+            <i class="bi bi-diagram-3 me-1"></i> Referral Tree
+        </button>
     </div>
 
-    <div id="referral-tree-wrapper">
+    <div id="referral-tree-wrapper" class="d-none">
         @include('livewire.officer.referrals.referral-tree', ['tree' => $referralTree ?? collect()])
         @if (($referralTree ?? collect())->isEmpty())
             <div class="card mb-4">
@@ -95,3 +98,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('referral-tree-toggle')?.addEventListener('click', function () {
+        document.getElementById('referral-tree-wrapper')?.classList.toggle('d-none');
+    });
+</script>
