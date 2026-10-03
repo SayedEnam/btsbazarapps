@@ -76,11 +76,11 @@
                     <a class="nav-link {{ request()->routeIs('customer.profile') ? 'active' : '' }}" href="{{ route('customer.profile') }}" wire:navigate>My Profile</a>
                 </li>
                 <li class="nav-item dropdown ms-lg-2" wire:ignore>
-                    <button class="nav-link d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="nav-link d-flex align-items-center gap-2" type="button" id="customer-user-dropdown-toggle" aria-expanded="false">
                         <span class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         <span>{{ auth()->user()->name }}</span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" id="customer-user-dropdown-menu">
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -124,6 +124,23 @@
         document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
             bootstrap.Dropdown.getOrCreateInstance(el);
         });
+    });
+
+    document.addEventListener('click', function (event) {
+        var toggle = event.target.closest('#customer-user-dropdown-toggle');
+        var menu = document.getElementById('customer-user-dropdown-menu');
+
+        if (toggle && menu) {
+            event.preventDefault();
+            event.stopPropagation();
+            menu.classList.toggle('show');
+            toggle.setAttribute('aria-expanded', menu.classList.contains('show'));
+            return;
+        }
+
+        if (menu && !menu.contains(event.target) && !event.target.closest('#customer-user-dropdown-toggle')) {
+            menu.classList.remove('show');
+        }
     });
 </script>
 
