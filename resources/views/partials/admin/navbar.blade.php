@@ -14,7 +14,7 @@
     <div class="d-flex align-items-center gap-2">
         @livewire('admin.notification-bell')
 
-        <div class="dropdown">
+        <div class="dropdown" wire:ignore>
             <button class="btn btn-light border d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="avatar-circle">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                 <span class="d-none d-md-inline">{{ $user->name }}</span>

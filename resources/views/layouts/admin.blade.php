@@ -232,6 +232,24 @@
     });
 </script>
 
+<script>
+    document.addEventListener('livewire:navigated', () => {
+        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
+            if (!el._bootstrapDropdown) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+    });
+
+    document.addEventListener('livewire:init', () => {
+        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
+            if (!el._bootstrapDropdown) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+    });
+</script>
+
 @livewireScripts
 </body>
 </html>

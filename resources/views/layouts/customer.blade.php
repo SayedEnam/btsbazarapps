@@ -115,7 +115,15 @@
 
 <script>
     document.addEventListener('livewire:navigated', () => {
-        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(el => {
+        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
+            if (!el._bootstrapDropdown) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+    });
+
+    document.addEventListener('livewire:init', () => {
+        document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
             if (!el._bootstrapDropdown) {
                 new bootstrap.Dropdown(el);
             }
