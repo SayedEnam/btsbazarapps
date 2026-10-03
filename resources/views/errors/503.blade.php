@@ -21,12 +21,13 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--primary);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         body::before {
@@ -52,7 +53,7 @@
         .container {
             background: rgba(255, 255, 255, 0.97);
             border-radius: 24px;
-            padding: 70px 50px;
+            padding: 50px 40px;
             max-width: 680px;
             width: 100%;
             text-align: center;
@@ -161,7 +162,7 @@
             border-radius: 50px;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(34, 24, 58, 0.2);
         }
 
@@ -183,8 +184,8 @@
         }
 
         .contact {
-            margin-top: 30px;
-            padding: 25px;
+            margin-top: 25px;
+            padding: 20px;
             background: #f7fafc;
             border-radius: 16px;
             border-left: 4px solid var(--primary);
@@ -215,16 +216,21 @@
         }
 
         .footer {
-            margin-top: 40px;
-            padding-top: 30px;
+            margin-top: 30px;
+            padding-top: 25px;
             border-top: 1px solid #e2e8f0;
             color: #718096;
             font-size: 13px;
         }
 
         @media (max-width: 640px) {
+            body {
+                padding: 15px;
+            }
+
             .container {
-                padding: 60px 30px;
+                padding: 40px 25px;
+                border-radius: 20px;
             }
 
             .code {
@@ -237,6 +243,44 @@
 
             p {
                 font-size: 16px;
+            }
+
+            .icon-wrapper {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 30px;
+            }
+
+            .gear::before {
+                width: 64px;
+                height: 64px;
+            }
+
+            .gear::after {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .code {
+                font-size: 64px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 15px;
             }
         }
     </style>
