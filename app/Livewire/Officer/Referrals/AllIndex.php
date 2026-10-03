@@ -54,6 +54,8 @@ class AllIndex extends Component
 
             $referralCodes = Referral::where('officer_id', $officerId)
                 ->whereHas('customer.user', fn ($q) => $q->whereNotNull('referral_code'))
+                ->with('customer.user')
+                ->get()
                 ->pluck('customer.user.referral_code')
                 ->filter()
                 ->unique()
