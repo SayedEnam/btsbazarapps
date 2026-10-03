@@ -86,10 +86,11 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('officer.profile') ? 'active' : '' }}" href="{{ route('officer.profile') }}" wire:navigate>My Profile</a>
                 </li>
-                <li class="nav-item dropdown ms-lg-2">
-                    <button class="nav-link dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <li class="nav-item dropdown ms-lg-2" wire:ignore>
+                    <button class="btn btn-light border d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         <span>{{ auth()->user()->name }}</span>
+                        <i class="bi bi-chevron-down small"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li>
