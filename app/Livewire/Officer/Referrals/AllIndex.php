@@ -137,14 +137,11 @@ class AllIndex extends Component
         $children = collect();
         $seenCodes[] = $parentCode;
 
-        $directRegistrations = User::where('referral_code', $parentCode)
-            ->whereHas('customer', function ($query) use ($parentCode) {
-                $query->whereIn('id', function ($q2) use ($parentCode) {
-                    $q2->select('customer_id')->from('referrals')->where('referral_code', $parentCode);
-                });
-            })
-            ->with('customer')
+        $directRegistrations = Referral::where('referral_code', $parentCode)
+            ->with('customer.user')
             ->get()
+            ->map(fn (Referral $r) => $r->customer->user)
+            ->filter()
             ->unique('id');
 
         foreach ($directRegistrations as $user) {
@@ -153,7 +150,7 @@ class AllIndex extends Component
             $children->push([
                 'name' => $user->name,
                 'code' => $childCode,
-                'registered_at' => $user->customer?->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+                'registered_at' => $user->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
                 'members' => $childCode ? $this->getTreeMemberCount($childCode) : 0,
                 'children' => $childCode ? $this->buildChildren($childCode, $seenCodes) : collect(),
             ]);
