@@ -122,7 +122,7 @@ class AllIndex extends Component
             'code' => $rootCode,
             'registered_at' => $officer->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
             'members' => $this->getTreeMemberCount($rootCode),
-            'children' => $this->buildChildren($rootCode, [$rootCode]),
+            'children' => $this->buildChildren($rootCode),
         ];
 
         return collect([$rootNode]);
