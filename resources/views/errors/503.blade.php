@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Unavailable - {{ config('app.name') }}</title>
+    <title>Service Unavailable - BTS Bazar</title>
     <style>
         :root {
-            --primary: {{ \App\Models\Setting::theme('theme_primary_color') ?? '#22183a' }};
-            --primary-dark: {{ \App\Models\Setting::theme('theme_primary_dark_color') ?? '#0f3d3e' }};
-            --primary-light: {{ \App\Models\Setting::theme('theme_primary_light_color') ?? '#1b8a6b' }};
+            --primary: #22183a;
+            --primary-dark: #0f3d3e;
+            --primary-light: #1b8a6b;
         }
 
         * {
@@ -309,12 +309,12 @@
             <div class="contact-title">Need Immediate Assistance?</div>
             <div class="contact-text">
                 Please contact us at <a href="mailto:support@btsbazar.com">support@btsbazar.com</a><br>
-                or call us at <strong>{{ \App\Models\Setting::theme('phone') ?? '+880 01953059064' }}</strong>
+                or call us at <strong>+880 01953059064</strong>
             </div>
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+            <p>&copy; 2026 BTS Bazar. All rights reserved.</p>
         </div>
     </div>
 </body>
