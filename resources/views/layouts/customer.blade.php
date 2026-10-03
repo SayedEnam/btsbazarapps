@@ -62,6 +62,18 @@
         .customer-navbar .nav-item.dropdown {
             position: relative;
         }
+        .user-menu-dropdown li a {
+            display: block;
+            padding: .5rem 1rem;
+            color: #dc3545;
+            text-decoration: none;
+        }
+        .user-menu-dropdown li a:hover {
+            background-color: #f8f9fa;
+        }
+        .user-menu-dropdown li + li {
+            border-top: 1px solid #eee;
+        }
     </style>
 
     @livewireStyles
@@ -96,11 +108,12 @@
                     </button>
                     <ul class="user-menu-dropdown dropdown-menu-end shadow-sm" id="customer-user-dropdown-menu">
                         <li>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <a class="text-danger text-decoration-none" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('customer-logout-form').submit();">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a>
+                            <form id="customer-logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
                                 @csrf
-                                <button type="submit" class="dropdown-item text-danger">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                </button>
                             </form>
                         </li>
                     </ul>

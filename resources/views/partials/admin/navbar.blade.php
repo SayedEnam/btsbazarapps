@@ -29,11 +29,12 @@
                     </a>
                 </li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                    </a>
+                    <form id="admin-logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
                         @csrf
-                        <button type="submit" class="dropdown-item text-danger">
-                            <i class="bi bi-box-arrow-right me-2"></i>Logout
-                        </button>
                     </form>
                 </li>
             </ul>
