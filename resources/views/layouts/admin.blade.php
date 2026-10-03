@@ -233,9 +233,9 @@
 </script>
 
 <script>
-    document.addEventListener('livewire:navigated', () => {
-        document.querySelectorAll('.nav-item.dropdown').forEach(function (item) {
-            var toggle = item.querySelector('.dropdown-toggle');
+    function initUserDropdowns() {
+        document.querySelectorAll('.nav-item.dropdown, .dropdown').forEach(function (item) {
+            var toggle = item.querySelector('.dropdown-toggle, button[aria-expanded]');
             var menu = item.querySelector('.dropdown-menu');
             if (!toggle || !menu) {
                 return;
@@ -251,27 +251,10 @@
                 toggle.setAttribute('aria-expanded', 'false');
             });
         });
-    });
+    }
 
-    document.addEventListener('livewire:init', () => {
-        document.querySelectorAll('.nav-item.dropdown').forEach(function (item) {
-            var toggle = item.querySelector('.dropdown-toggle');
-            var menu = item.querySelector('.dropdown-menu');
-            if (!toggle || !menu) {
-                return;
-            }
-
-            item.addEventListener('mouseenter', function () {
-                menu.classList.add('show');
-                toggle.setAttribute('aria-expanded', 'true');
-            });
-
-            item.addEventListener('mouseleave', function () {
-                menu.classList.remove('show');
-                toggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-    });
+    document.addEventListener('livewire:navigated', initUserDropdowns);
+    document.addEventListener('livewire:init', initUserDropdowns);
 </script>
 
 @livewireScripts
