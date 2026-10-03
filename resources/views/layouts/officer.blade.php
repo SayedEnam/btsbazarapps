@@ -129,17 +129,13 @@
 <script>
     document.addEventListener('livewire:navigated', () => {
         document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
-            if (!el._bootstrapDropdown) {
-                new bootstrap.Dropdown(el);
-            }
+            bootstrap.Dropdown.getOrCreateInstance(el);
         });
     });
 
     document.addEventListener('livewire:init', () => {
         document.querySelectorAll('.dropdown-toggle[data-bs-toggle="dropdown"]').forEach(el => {
-            if (!el._bootstrapDropdown) {
-                new bootstrap.Dropdown(el);
-            }
+            bootstrap.Dropdown.getOrCreateInstance(el);
         });
     });
 </script>
