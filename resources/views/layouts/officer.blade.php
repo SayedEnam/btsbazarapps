@@ -50,6 +50,20 @@
             width: 44px; height: 44px; border-radius: .65rem;
             display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: #fff;
         }
+        .user-menu-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            margin-top: .5rem;
+            min-width: 180px;
+            z-index: 1050;
+        }
+        .user-menu-dropdown.show {
+            display: block;
+        }
+        .officer-navbar .nav-item.dropdown {
+            position: relative;
+        }
     </style>
 
     @livewireStyles
@@ -87,11 +101,11 @@
                     <a class="nav-link {{ request()->routeIs('officer.profile') ? 'active' : '' }}" href="{{ route('officer.profile') }}" wire:navigate>My Profile</a>
                 </li>
                 <li class="nav-item dropdown ms-lg-2" wire:ignore>
-                    <button class="nav-link d-flex align-items-center gap-2" type="button" id="officer-user-dropdown-toggle" aria-expanded="false">
+                    <button class="nav-link d-flex align-items-center gap-2 user-menu-toggle" type="button" id="officer-user-dropdown-toggle" aria-expanded="false">
                         <span class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         <span>{{ auth()->user()->name }}</span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" id="officer-user-dropdown-menu">
+                    <ul class="user-menu-dropdown dropdown-menu-end shadow-sm" id="officer-user-dropdown-menu">
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
