@@ -49,7 +49,7 @@
 
         <div class="text-center mt-3">
             <p class="text-center small text-muted mt-3 mb-0">Not a member yet?
-            <a href="{{ route('register') }}" wire:navigate class="text-brand text-decoration-none">Create a New Account</a>
+            <a href="{{ route('register') }}" class="text-brand text-decoration-none">Create a New Account</a>
             </p>
         </div>
     </form>

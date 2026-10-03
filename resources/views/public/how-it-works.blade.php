@@ -62,7 +62,7 @@
                     @endforeach
 
                     <div class="text-center mt-5">
-                        <a href="{{ route('register') }}" class="btn btn-brand btn-lg" wire:navigate>Get Started</a>
+                        <a href="{{ route('register') }}" class="btn btn-brand btn-lg">Get Started</a>
                     </div>
                 </div>
             </div>

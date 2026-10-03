@@ -45,7 +45,7 @@
                                             <a href="{{ route('customer.apply') }}" class="btn btn-brand mt-3" wire:navigate>Apply Now</a>
                                         @endif
                                     @else
-                                        <a href="{{ route('register') }}" class="btn btn-brand mt-3" wire:navigate>Apply Now</a>
+                                        <a href="{{ route('register') }}" class="btn btn-brand mt-3">Apply Now</a>
                                     @endauth
                                 </div>
                             </div>

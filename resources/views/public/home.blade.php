@@ -35,8 +35,8 @@
                                                 <p class="lead mb-4" style="opacity:.9;">{{ $slide->subtitle }}</p>
                                             @endif
                                             <div class="d-flex flex-wrap gap-2">
-                                                <a href="{{ $slide->button_url ?: route('register') }}" class="btn btn-light btn-lg text-brand fw-semibold" wire:navigate>{{ $slide->button_text ?: 'Get Started' }}</a>
-                                                <a href="{{ route('packages') }}" class="btn btn-outline-light btn-lg" wire:navigate>View Packages</a>
+                                <a href="{{ $slide->button_url ?: route('register') }}" class="btn btn-light btn-lg text-brand fw-semibold">{{ $slide->button_text ?: 'Get Started' }}</a>
+                                <a href="{{ route('packages') }}" class="btn btn-outline-light btn-lg" wire:navigate>View Packages</a>
                                             </div>
                                         </div>
                                         <div class="col-lg-5 d-none d-lg-block text-center">
@@ -80,7 +80,7 @@
                             every step of the way.
                         </p>
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="{{ route('register') }}" class="btn btn-light btn-lg text-brand fw-semibold" wire:navigate>Get Started</a>
+                            <a href="{{ route('register') }}" class="btn btn-light btn-lg text-brand fw-semibold">Get Started</a>
                             <a href="{{ route('packages') }}" class="btn btn-outline-light btn-lg" wire:navigate>View Packages</a>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                                             <a href="{{ route('customer.apply') }}" class="btn btn-brand mt-3" wire:navigate>Apply Now</a>
                                         @endif
                                     @else
-                                        <a href="{{ route('register') }}" class="btn btn-brand mt-3" wire:navigate>Apply Now</a>
+                                        <a href="{{ route('register') }}" class="btn btn-brand mt-3">Apply Now</a>
                                     @endauth
                                 </div>
                             </div>

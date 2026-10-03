@@ -89,7 +89,7 @@
         </button>
 
         <p class="text-center small text-muted mt-3 mb-0">
-            Already have an account? <a href="{{ route('login') }}" class="text-brand text-decoration-none" wire:navigate>Sign in</a>
+            Already have an account? <a href="{{ route('login') }}" class="text-brand text-decoration-none">Sign in</a>
         </p>
     </form>
 </div>

@@ -27,7 +27,7 @@
         </button>
 
         <div class="text-center mt-3">
-            <a href="{{ route('login') }}" class="small text-brand text-decoration-none" wire:navigate>Back to login</a>
+            <a href="{{ route('login') }}" class="small text-brand text-decoration-none">Back to login</a>
         </div>
     </form>
 </div>
