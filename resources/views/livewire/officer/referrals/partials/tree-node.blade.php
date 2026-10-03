@@ -3,8 +3,9 @@
     /** @var int $level */
 @endphp
 
-<div class="tree-node" style="--level: {{ $level }};">
+<div class="tree-node tree-node-level-{{ min($level, 4) }}">
     <div class="tree-node-card">
+        <div class="tree-node-avatar">{{ strtoupper(substr($node['name'], 0, 1)) }}</div>
         <div class="tree-node-title">{{ $node['name'] }}</div>
         <div class="tree-node-meta">
             <code>{{ $node['code'] }}</code>
