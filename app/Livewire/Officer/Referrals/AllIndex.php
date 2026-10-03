@@ -5,6 +5,7 @@ namespace App\Livewire\Officer\Referrals;
 use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -45,33 +46,57 @@ class AllIndex extends Component
             ->latest('registered_at')
             ->paginate(10);
 
-        $allOfficerReferrals = Referral::where('officer_id', Auth::id())->get();
-        $referralCodes = $allOfficerReferrals->pluck('customer.user.referral_code')->filter()->unique()->values()->all();
+        $officerId = Auth::id();
+        $cacheKey = "referral.stats.officer.{$officerId}";
 
-        $counts = [];
-        $treeCounts = [];
-        $allTreeCodes = collect();
+        $stats = Cache::remember($cacheKey, 300, function () use ($officerId) {
+            $totalReferrals = Referral::where('officer_id', $officerId)->count();
 
-        if (! empty($referralCodes)) {
-            $counts = Referral::whereIn('referral_code', $referralCodes)
-                ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
-                ->groupBy('referral_code')
-                ->pluck('total', 'referral_code')
+            $referralCodes = Referral::where('officer_id', $officerId)
+                ->whereHas('customer.user', fn ($q) => $q->whereNotNull('referral_code'))
+                ->pluck('customer.user.referral_code')
+                ->filter()
+                ->unique()
+                ->values()
                 ->all();
 
-            foreach ($referralCodes as $code) {
-                $treeCodes = $this->getTreeReferralCodes($code);
-                $treeCounts[$code] = Referral::whereIn('referral_code', $treeCodes)->count();
-                $allTreeCodes = $allTreeCodes->merge($treeCodes);
+            $counts = [];
+            $treeCounts = [];
+            $allTreeCodes = collect();
+
+            if (! empty($referralCodes)) {
+                $counts = Referral::whereIn('referral_code', $referralCodes)
+                    ->select('referral_code', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+                    ->groupBy('referral_code')
+                    ->pluck('total', 'referral_code')
+                    ->all();
+
+                foreach ($referralCodes as $code) {
+                    $treeCodes = $this->getTreeReferralCodes($code);
+                    $treeCounts[$code] = Referral::whereIn('referral_code', $treeCodes)->count();
+                    $allTreeCodes = $allTreeCodes->merge($treeCodes);
+                }
             }
-        }
+
+            $allMemberCount = 0;
+            if ($allTreeCodes->unique()->isNotEmpty()) {
+                $allMemberCount = Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count();
+            }
+
+            return [
+                'totalReferrals' => $totalReferrals,
+                'allMemberCount' => $allMemberCount,
+                'referralCounts' => $counts,
+                'treeCounts' => $treeCounts,
+            ];
+        });
 
         return view('livewire.officer.referrals.all-index', [
             'referrals' => $referrals,
-            'totalReferrals' => $allOfficerReferrals->count(),
-            'allMemberCount' => $allTreeCodes->unique()->isNotEmpty() ? Referral::whereIn('referral_code', $allTreeCodes->unique()->values()->all())->count() : 0,
-            'referralCounts' => $counts,
-            'treeCounts' => $treeCounts,
+            'totalReferrals' => $stats['totalReferrals'],
+            'allMemberCount' => $stats['allMemberCount'],
+            'referralCounts' => $stats['referralCounts'],
+            'treeCounts' => $stats['treeCounts'],
         ]);
     }
 

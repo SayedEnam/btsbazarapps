@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Referral;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -103,6 +104,8 @@ class RegisterForm extends Form
                         'referral_code' => $referralCode,
                         'registered_at' => now(),
                     ]);
+
+                    Cache::forget("referral.stats.officer.{$officer->id}");
                 }
             }
 

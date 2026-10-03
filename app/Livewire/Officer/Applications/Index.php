@@ -9,6 +9,7 @@ use App\Models\Designation;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -120,6 +121,8 @@ class Index extends Component
             return;
         }
 
+        $hadOfficerRole = $user->referral_code !== null;
+
         if ($roleId) {
             $user->roles()->sync([$roleId]);
         } else {
@@ -141,7 +144,22 @@ class Index extends Component
             $user->update(['referral_code' => $referralCode]);
         }
 
+        $hasOfficerRole = $user->referral_code !== null;
+
+        if ($hadOfficerRole !== $hasOfficerRole) {
+            $this->invalidateReferralStatsCache();
+        }
+
         $this->dispatch('notify', type: 'success', message: 'Role updated successfully.');
+    }
+
+    private function invalidateReferralStatsCache(): void
+    {
+        $officerIds = Referral::pluck('officer_id')->unique()->values();
+
+        foreach ($officerIds as $officerId) {
+            Cache::forget("referral.stats.officer.{$officerId}");
+        }
     }
 
     protected function applyStatusChange(Application $application, ApplicationStatus $status, ?string $reason = null): bool
