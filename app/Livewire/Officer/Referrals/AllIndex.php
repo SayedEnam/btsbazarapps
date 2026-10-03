@@ -122,31 +122,40 @@ class AllIndex extends Component
             'code' => $rootCode,
             'registered_at' => $officer->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
             'members' => $this->getTreeMemberCount($rootCode),
-            'children' => $this->buildChildren($rootCode),
+            'children' => $this->buildChildren($rootCode, [$rootCode]),
         ];
 
         return collect([$rootNode]);
     }
 
-    private function buildChildren(string $parentCode): \Illuminate\Support\Collection
+    private function buildChildren(string $parentCode, array $seenCodes = []): \Illuminate\Support\Collection
     {
+        if (in_array($parentCode, $seenCodes, true)) {
+            return collect();
+        }
+
         $children = collect();
+        $seenCodes[] = $parentCode;
 
-        $directReferrals = Referral::where('referral_code', $parentCode)
-            ->with('customer.user')
+        $directRegistrations = User::where('referral_code', $parentCode)
+            ->whereHas('customer', function ($query) use ($parentCode) {
+                $query->whereIn('id', function ($q2) use ($parentCode) {
+                    $q2->select('customer_id')->from('referrals')->where('referral_code', $parentCode);
+                });
+            })
+            ->with('customer')
             ->get()
-            ->filter(fn (Referral $r) => $r->customer?->user?->referral_code && $r->customer->user->referral_code !== $parentCode);
+            ->unique('id');
 
-        foreach ($directReferrals as $referral) {
-            $user = $referral->customer->user;
+        foreach ($directRegistrations as $user) {
             $childCode = $user->referral_code;
 
             $children->push([
                 'name' => $user->name,
                 'code' => $childCode,
-                'registered_at' => $referral->registered_at->format('Y-m-d H:i:s'),
-                'members' => $this->getTreeMemberCount($childCode),
-                'children' => $this->buildChildren($childCode),
+                'registered_at' => $user->customer?->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+                'members' => $childCode ? $this->getTreeMemberCount($childCode) : 0,
+                'children' => $childCode ? $this->buildChildren($childCode, $seenCodes) : collect(),
             ]);
         }
 
